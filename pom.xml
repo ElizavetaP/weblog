@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <!-- Артефакты вашего проекта: группа, имя и версия -->
-    <groupId>ru.yandex.practicum</groupId>
-    <artifactId>spring-web-demo</artifactId>
+    <groupId>ru.yandex.weblog</groupId>
+    <artifactId>weblog</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <!-- Упаковка в .war -->
@@ -72,10 +72,20 @@
             <version>2.2</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.12</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.5.13</version>
+        </dependency>
     </dependencies>
 
     <build>
-        <finalName>spring-web-demo</finalName>
+        <finalName>weblog</finalName>
         <pluginManagement>
             <plugins>
                 <plugin>
