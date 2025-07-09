@@ -22,9 +22,23 @@ public class JdbcPostRepository implements PostRepository{
 
     @Override
     public List<Post> findAll() {
-        String sql = "SELECT p.id AS post_id, p.title, p.textPreview, p.likesCount, " +
-                "c.id AS comment_id, c.text AS comment_text, c.author, c.created_at " +
-                "FROM post p LEFT JOIN comment c ON p.id = c.post_id";
+        String sql = "SELECT p.id AS post_id,\n" +
+                "       p.title,\n" +
+                "       p.textPreview,\n" +
+                "       p.likesCount,\n" +
+                "\n" +
+                "       c.id AS comment_id,\n" +
+                "       c.text AS comment_text,\n" +
+                "       c.author,\n" +
+                "       c.created_at,\n" +
+                "\n" +
+                "       t.id AS tag_id,\n" +
+                "       t.name AS tag_name\n" +
+                "\n" +
+                "FROM post p\n" +
+                "LEFT JOIN comment c ON p.id = c.post_id\n" +
+                "LEFT JOIN post_tag pt ON p.id = pt.post_id\n" +
+                "LEFT JOIN tag t ON pt.tag_id = t.id";
 
         Map<Long, Post> postMap = new LinkedHashMap<>();
 
@@ -39,6 +53,7 @@ public class JdbcPostRepository implements PostRepository{
                 post.setTextPreview(rs.getString("textPreview"));
                 post.setLikesCount(rs.getInt("likesCount"));
                 post.setComments(new ArrayList<>());
+                post.setTags(new ArrayList<>());
                 postMap.put(postId, post);
             }
 
@@ -53,6 +68,12 @@ public class JdbcPostRepository implements PostRepository{
                 if (ts != null) comment.setCreatedAt(ts.toLocalDateTime());
                 comment.setPostId(postId);
                 post.getComments().add(comment);
+            }
+
+            // Тег
+            String tagName = rs.getString("tag_name");
+            if (tagName != null && !post.getTags().contains(tagName)) {
+                post.getTags().add(tagName);
             }
         });
 

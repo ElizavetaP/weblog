@@ -29,3 +29,38 @@ INSERT INTO comment (post_id, text, author, created_at) VALUES
 
 (3, 'Этот - лучший', 'Мария', '2024-07-03 08:30:00'),
 (3, 'Похож на моего кота', 'Артем', '2024-07-03 08:45:00');
+
+--Таблица с тегами
+create table if not exists tag (
+  id bigserial primary key,
+  name varchar(64) not null unique
+);
+
+--Многие-ко-многим пост-тег
+create table if not exists post_tag (
+  post_id bigint not null,
+  tag_id bigint not null,
+  foreign key (post_id) references post(id) on delete cascade,
+  foreign key (tag_id) references tag(id) on delete cascade,
+  primary key (post_id, tag_id)
+);
+
+INSERT INTO tag (name) VALUES
+('кот'),
+('животные'),
+('милота'),
+('вопрос'),
+('юмор');
+
+INSERT INTO post_tag (post_id, tag_id) VALUES
+(1, 1),  -- кот
+(1, 2),  -- животные
+(1, 3);  -- милота
+
+INSERT INTO post_tag (post_id, tag_id) VALUES
+(2, 1),  -- кот
+(2, 4);  -- вопрос
+
+INSERT INTO post_tag (post_id, tag_id) VALUES
+(3, 1),  -- кот
+(3, 5);  -- юмор
