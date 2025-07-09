@@ -6,12 +6,14 @@ public class Post {
     private Long id;
     private String title;
     private String textPreview;
-    private String imagePath;
     private int likesCount;
-    private java.util.List<Comment> comments;
-    private java.util.List<String> tags;
+    private List<Comment> comments;
+    private List<String> tags;
 
     public Post() {
+    }
+
+    public Post(long id, String title, String textPreview, int likesCount) {
     }
 
     public Long getId() {
@@ -24,10 +26,6 @@ public class Post {
 
     public String getTextPreview() {
         return textPreview;
-    }
-
-    public String getImagePath() {
-        return imagePath;
     }
 
     public int getLikesCount() {
@@ -52,10 +50,6 @@ public class Post {
 
     public void setTextPreview(String textPreview) {
         this.textPreview = textPreview;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
 
     public void setLikesCount(int likesCount) {

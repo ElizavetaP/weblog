@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.weblog.model.Paging;
 import ru.yandex.weblog.model.Post;
+import ru.yandex.weblog.service.PostService;
 
 import java.util.List;
 
@@ -12,11 +13,11 @@ import java.util.List;
 @RequestMapping("/posts")
 public class PostController {
 
-//    private final PostService postService;
-//
-//    public PostController(PostService postService) {
-//        this.postService = postService;
-//    }
+    private final PostService postService;
+
+    public PostController(PostService postService) {
+        this.postService = postService;
+    }
 
     @GetMapping
     public String getPosts(@RequestParam(value = "search", defaultValue = "") String search,
@@ -24,25 +25,7 @@ public class PostController {
                            @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
                            Model model) {
 
-        Post post1 = new Post();
-        post1.setId(1L);
-        post1.setTitle("Title 1");
-        post1.setTextPreview("Пост 1");
-        post1.setComments(List.of());
-
-        Post post2 = new Post();
-        post2.setId(2L);
-        post2.setTitle("Title 2");
-        post2.setTextPreview("Пост 2");
-        post2.setComments(List.of());
-
-        Post post3 = new Post();
-        post3.setId(3L);
-        post3.setTitle("Title 3");
-        post3.setTextPreview("Пост 3");
-        post3.setComments(List.of());
-
-        List<Post> allPosts = List.of(post1, post2, post3);
+        List<Post> allPosts = postService.findAll();
 
         int totalPosts = allPosts.size();
         int fromIndex = Math.max(0, (pageNumber - 1) * pageSize);
