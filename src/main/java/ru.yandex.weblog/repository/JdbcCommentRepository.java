@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.yandex.weblog.model.Comment;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -40,14 +41,16 @@ public class JdbcCommentRepository implements CommentRepository {
     }
 
     @Override
-    public Comment save(Comment comment) {
-        return null;
+    public void save(Comment comment) {
+         jdbcTemplate.update("INSERT INTO comment (post_id, text, created_at) VALUES (?, ?, ?);",
+        comment.getPostId(), comment.getText(), comment.getCreatedAt());
     }
 
     @Override
     public void update(Comment comment) {
-        jdbcTemplate.update("UPDATE comment SET text = ? WHERE id = ?",
+        jdbcTemplate.update("UPDATE comment SET text = ?, created_at = ? WHERE id = ?",
                 comment.getText(),
+                comment.getCreatedAt(),
                 comment.getId()
         );
     }

@@ -39,8 +39,12 @@ public class CommentServiceImpl implements CommentService{
     }
 
     @Override
-    public Comment addComment(Comment comment) {
-        return null;
+    public void addComment(Long postId, String text) {
+        Comment comment = new Comment();
+        comment.setCreatedAt(LocalDateTime.now());
+        comment.setText(text);
+        comment.setPostId(postId);
+        commentRepository.save(comment);
     }
 
     @Override

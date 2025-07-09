@@ -20,7 +20,7 @@ public class CommentController {
 
     @PostMapping("/{id}/comments")
     public String addComment(@PathVariable("id") Long id, @RequestParam("text") String text) {
-        // TODO: реализовать добавление комментария
+        commentService.addComment(id, text);
         return "redirect:/posts/" + id;
     }
 
