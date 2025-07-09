@@ -6,10 +6,7 @@ import ru.yandex.weblog.model.Comment;
 import ru.yandex.weblog.model.Post;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class JdbcPostRepository implements PostRepository{
@@ -85,17 +82,56 @@ public class JdbcPostRepository implements PostRepository{
         return List.of();
     }
 
-    public Post findById(Long id){
-        return jdbcTemplate.query(
-                "select id, title, textPreview, likesCount from post where id = ?",
-                (rs, rowNum) -> new Post(
-                        rs.getLong("id"),
-                        rs.getString("title"),
-                        rs.getString("textPreview"),
-                        rs.getInt("likesCount")
-                ),
-                id).getFirst();
+    @Override
+    public Post findById(Long id) {
+        String sql = "SELECT " +
+                "p.id as post_id, p.title, p.textPreview, p.likesCount, " +
+                "c.id as comment_id, c.text as comment_text, c.author, c.created_at, " +
+                "t.name as tag_name " +
+                "FROM post p " +
+                "LEFT JOIN comment c ON p.id = c.post_id " +
+                "LEFT JOIN post_tag pt ON p.id = pt.post_id " +
+                "LEFT JOIN tag t ON pt.tag_id = t.id " +
+                "WHERE p.id = ?";
+        return jdbcTemplate.query(sql, rs -> {
+            Post post = null;
+            Set<String> tagNames = new HashSet<>();
+            Set<Long> commentIds = new HashSet<>();
+            while (rs.next()) {
+                if (post == null) {
+                    post = new Post();
+                    post.setId(rs.getLong("post_id"));
+                    post.setTitle(rs.getString("title"));
+                    post.setTextPreview(rs.getString("textPreview"));
+                    post.setLikesCount(rs.getInt("likesCount"));
+                    post.setComments(new ArrayList<>());
+                    post.setTags(new ArrayList<>());
+                }
+
+                // Обработка комментария (если есть)
+                long commentId = rs.getLong("comment_id");
+                if (commentId != 0 && !commentIds.contains(commentId)) {
+                    Comment comment = new Comment();
+                    comment.setId(commentId);
+                    comment.setText(rs.getString("comment_text"));
+                    comment.setAuthor(rs.getString("author"));
+                    Timestamp ts = rs.getTimestamp("created_at");
+                    if (ts != null) comment.setCreatedAt(ts.toLocalDateTime());
+                    comment.setPostId(post.getId());
+                    post.getComments().add(comment);
+                    commentIds.add(commentId);
+                }
+                // Тег
+                String tagName = rs.getString("tag_name");
+                if (tagName != null && !tagNames.contains(tagName)) {
+                    post.getTags().add(tagName);
+                    tagNames.add(tagName);
+                }
+            }
+            return post;
+        }, id);
     }
+
 
     @Override
     public void update(Post post) {
