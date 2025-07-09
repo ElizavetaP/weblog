@@ -18,6 +18,6 @@ public interface PostService {
 
     public void deleteById(Long id);
 
-    void likePost(Long id, boolean like);
+    void likePost(Long id, boolean isLike);
 
 }

@@ -16,4 +16,6 @@ public interface PostRepository {
     Post findById(Long id);
 
     void update(Post post);
+
+    void likePost(Long id, boolean isLike);
 }

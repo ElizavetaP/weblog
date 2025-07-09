@@ -43,14 +43,8 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void likePost(Long id, boolean like) {
-        // Реализация увеличения/уменьшения лайков
-        Post post = postRepository.findById(id);
-        if (post != null) {
-            int likes = post.getLikesCount();
-            post.setLikesCount(like ? likes + 1 : likes - 1);
-            postRepository.update(post);
-        }
+    public void likePost(Long id, boolean isLike) {
+        postRepository.likePost(id, isLike);
     }
 
 } 

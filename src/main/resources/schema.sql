@@ -3,7 +3,7 @@ create table if not exists post(
   id bigserial primary key,
   title varchar(256) not null,
   textPreview varchar(256),
-  likesCount integer);
+  likesCount integer default 0);
 
 
 insert into post(title, textPreview, likesCount) values ('Cat 1', 'Это пост про кота', 55);

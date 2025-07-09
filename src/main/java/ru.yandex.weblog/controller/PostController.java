@@ -51,16 +51,16 @@ public class PostController {
     }
 
     @GetMapping("/{id}")
-    public String getPost(@PathVariable ("id") Long id, Model model) {
+    public String getPost(@PathVariable("id") Long id, Model model) {
         Post post = postService.getPostById(id);
         model.addAttribute("post", post);
         return "post";
     }
 
     @PostMapping("/{id}/like")
-    public String likePost(@PathVariable Long id, @RequestParam boolean like) {
-        // TODO: реализовать лайк/дизлайк
-        return "redirect:/weblog/posts/" + id;
+    public String likePost(@PathVariable("id") Long id, @RequestParam("like") boolean like) {
+        postService.likePost(id, like);
+        return "redirect:/posts/" + id;
     }
 
 } 

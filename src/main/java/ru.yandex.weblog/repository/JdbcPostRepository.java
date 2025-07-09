@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 import java.util.*;
 
 @Repository
-public class JdbcPostRepository implements PostRepository{
+public class JdbcPostRepository implements PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -38,6 +38,8 @@ public class JdbcPostRepository implements PostRepository{
                 "LEFT JOIN tag t ON pt.tag_id = t.id";
 
         Map<Long, Post> postMap = new LinkedHashMap<>();
+        Map<Long, Set<Long>> postCommentIds = new HashMap<>();
+        Map<Long, Set<String>> postTagNames = new HashMap<>();
 
         jdbcTemplate.query(sql, rs -> {
             long postId = rs.getLong("post_id");
@@ -52,11 +54,12 @@ public class JdbcPostRepository implements PostRepository{
                 post.setComments(new ArrayList<>());
                 post.setTags(new ArrayList<>());
                 postMap.put(postId, post);
+                postCommentIds.put(postId, new HashSet<>());
             }
 
             // Обработка комментария (если есть)
             long commentId = rs.getLong("comment_id");
-            if (commentId != 0) {
+            if (commentId != 0 && !postCommentIds.get(postId).contains(commentId)) {
                 Comment comment = new Comment();
                 comment.setId(commentId);
                 comment.setText(rs.getString("comment_text"));
@@ -65,6 +68,7 @@ public class JdbcPostRepository implements PostRepository{
                 if (ts != null) comment.setCreatedAt(ts.toLocalDateTime());
                 comment.setPostId(postId);
                 post.getComments().add(comment);
+                postCommentIds.get(postId).add(commentId);
             }
 
             // Тег
@@ -132,6 +136,20 @@ public class JdbcPostRepository implements PostRepository{
         }, id);
     }
 
+    @Override
+    public void likePost(Long id, boolean isLike) {
+        int likesCount = jdbcTemplate.queryForObject("SELECT likesCount FROM post WHERE id = ?",
+                Integer.class,
+                id);
+        if (isLike) {
+            likesCount += 1;
+        } else {
+            likesCount = (likesCount > 0) ? likesCount - 1 : 0;
+        }
+        jdbcTemplate.update("UPDATE post SET likesCount = ? WHERE id = ?",
+                likesCount,
+                id);
+    }
 
     @Override
     public void update(Post post) {
