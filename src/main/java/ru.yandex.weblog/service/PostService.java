@@ -10,8 +10,6 @@ public interface PostService {
 
     public List<Post> findAll(String tag, int pageSize, int pageNumber);
 
-    List<Post> getPosts(String search, int pageSize, int pageNumber);
-
     Post getPostById(Long id);
 
     public void addPost(Post post);

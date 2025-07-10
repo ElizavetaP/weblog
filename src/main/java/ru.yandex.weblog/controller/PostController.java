@@ -56,4 +56,26 @@ public class PostController {
         return "redirect:/posts/" + id;
     }
 
+    @GetMapping("/add")
+    public String addPostForm(Model model) {
+        model.addAttribute("post", null);
+        return "add-post";
+    }
+
+    @PostMapping
+    public String addPost(@RequestParam("title") String title,
+                          @RequestParam("textPreview") String textPreview,
+                          @RequestParam(value = "tags", required = true) String tags,
+                          @RequestParam(value = "image", required = false) String image) {
+
+        Post post = new Post();
+        post.setTitle(title);
+        post.setTextPreview(textPreview);
+        post.setImage(image);
+
+        postService.addPost(post);
+
+        return "redirect:/posts";
+    }
+
 } 

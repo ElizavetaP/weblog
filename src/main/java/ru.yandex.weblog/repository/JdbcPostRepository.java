@@ -35,9 +35,9 @@ public class JdbcPostRepository implements PostRepository {
                 
                 FROM (SELECT DISTINCT p.id
                       FROM post p
-                      JOIN post_tag pt ON p.id = pt.post_id
-                      JOIN tag t ON pt.tag_id = t.id
-                      WHERE t.name LIKE ?
+                      LEFT JOIN post_tag pt ON p.id = pt.post_id
+                      LEFT JOIN tag t ON pt.tag_id = t.id
+                      WHERE (? = '' OR t.name LIKE ?)
                       ORDER BY p.id
                       LIMIT ? OFFSET ?
                       ) ids
@@ -85,7 +85,7 @@ public class JdbcPostRepository implements PostRepository {
             if (tagName != null && !post.getTags().contains(tagName)) {
                 post.getTags().add(tagName);
             }
-        }, "%" + tag + "%", pageSize, (pageNumber - 1)*pageSize);
+        }, tag, "%" + tag + "%", pageSize, (pageNumber - 1) * pageSize);
 
         return new ArrayList<>(postMap.values());
     }
@@ -93,7 +93,7 @@ public class JdbcPostRepository implements PostRepository {
     @Override
     public Post findById(Long id) {
         String sql = """
-                SELECT p.id as post_id, p.title, p.textPreview, p.likesCount,
+                SELECT p.id as post_id, p.title, p.textPreview, p.likesCount, p.image,
                     c.id as comment_id, c.text as comment_text, c.author, c.created_at,
                     t.name as tag_name
                 FROM post p
@@ -113,6 +113,7 @@ public class JdbcPostRepository implements PostRepository {
                     post.setTitle(rs.getString("title"));
                     post.setTextPreview(rs.getString("textPreview"));
                     post.setLikesCount(rs.getInt("likesCount"));
+                    post.setImage(rs.getString("image"));
                     post.setComments(new ArrayList<>());
                     post.setTags(new ArrayList<>());
                 }
@@ -163,9 +164,8 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public void save(Post post) {
-        // Формируем insert-запрос с параметрами
-        jdbcTemplate.update("insert into post(title, textPreview) values(?, ?)",
-                post.getTitle(), post.getTextPreview());
+        jdbcTemplate.update("insert into post(title, textPreview, image) values(?, ?, ?)",
+                post.getTitle(), post.getTextPreview(), post.getImage());
     }
 
     @Override

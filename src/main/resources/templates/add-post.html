@@ -9,7 +9,7 @@
 <a href="/weblog/posts" style="float:right;">
     <b>НА ГЛАВНУЮ &cudarrr;</b>
 </a>
-<form method="POST" th:action="${post==null ? '/weblog/posts' : '/weblog/posts/'+post.getId()}" enctype="multipart/form-data">
+<form method="POST" th:action="${post==null ? '/weblog/posts' : '/weblog/posts/'+post.getId()}">
     <table style="width:50%;margin-left:auto;margin-right:auto;">
         <tr>
             <td>
@@ -19,8 +19,8 @@
         </tr>
         <tr>
             <td>
-                <h3>Изображение</h3>
-                <input type="file" name="image">
+                <h3>Изображение (имя файла)</h3>
+                <input type="text" name="image" style="width: 100%;" placeholder="Например: 1.jpg">
             </td>
         </tr>
         <tr>
@@ -32,7 +32,7 @@
         <tr>
             <td>
                 <h3>Текст</h3>
-                <textarea rows="30" style="width: 100%;" name="text" th:text="${post==null ? '' : post.getText()}"></textarea>
+                <textarea rows="30" style="width: 100%;" name="textPreview" th:text="${post==null ? '' : post.getTextPreview()}"></textarea>
             </td>
         </tr>
         <tr>

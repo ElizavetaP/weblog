@@ -3,15 +3,17 @@ create table if not exists post(
   id bigserial primary key,
   title varchar(256) not null,
   textPreview varchar(256),
-  likesCount integer default 0);
+  likesCount integer default 0,
+  image varchar(256)
+  );
 
 
-insert into post(title, textPreview, likesCount) values ('Бублик', 'Это пост про кота', 55);
-insert into post(title, textPreview, likesCount) values ('Барсик', 'Еще один пост про кота', 60);
-insert into post(title, textPreview, likesCount) values ('Снежок', 'Новый кот', 53);
-insert into post(title, textPreview, likesCount) values ('Василий', 'Кот', 55);
-insert into post(title, textPreview, likesCount) values ('Муся', 'Мой кот', 60);
-insert into post(title, textPreview, likesCount) values ('Урсула', 'Новый кот', 53);
+insert into post(title, textPreview, likesCount, image) values ('Бублик', 'Это пост про кота', 55, '1.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Барсик', 'Еще один пост про кота', 60, '2.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Снежок', 'Новый кот', 53, '3.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Василий', 'Кот', 55, '4.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Муся', 'Мой кот', 60, '5.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Урсула', 'Новый кот', 53, '6.jpg');
 
 create table if not exists comment (
   id bigserial primary key,

@@ -7,13 +7,11 @@ public class Post {
     private String title;
     private String textPreview;
     private int likesCount;
+    private String image;
     private List<Comment> comments;
     private List<String> tags;
 
     public Post() {
-    }
-
-    public Post(long id, String title, String textPreview, int likesCount) {
     }
 
     public Long getId() {
@@ -62,6 +60,14 @@ public class Post {
 
     public void setTags(List<String> tags) {
         this.tags = tags;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
 } 

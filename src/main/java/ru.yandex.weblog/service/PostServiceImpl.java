@@ -23,11 +23,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getPosts(String search, int pageSize, int pageNumber) {
-        return postRepository.findAll(search, pageSize, pageNumber);
-    }
-
-    @Override
     public Post getPostById(Long id) {
         return postRepository.findById(id);
     }
