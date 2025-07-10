@@ -20,30 +20,23 @@ public class PostController {
     }
 
     @GetMapping
-    public String getPosts(@RequestParam(value = "search", defaultValue = "") String search,
-                           @RequestParam(value = "pageSize", defaultValue = "3") int pageSize,
+    public String getPosts(@RequestParam(value = "search", defaultValue = "") String tag,
+                           @RequestParam(value = "pageSize", defaultValue = "5") int pageSize,
                            @RequestParam(value = "pageNumber", defaultValue = "1") int pageNumber,
                            Model model) {
 
-        List<Post> allPosts = postService.findAll();
+        List<Post> paginatedPosts = postService.findAll(tag, pageSize, pageNumber);
 
-        int totalPosts = allPosts.size();
-        int fromIndex = Math.max(0, (pageNumber - 1) * pageSize);
-        int toIndex = Math.min(fromIndex + pageSize, totalPosts);
-
-        List<Post> paginatedPosts = fromIndex >= totalPosts ? List.of() : allPosts.subList(fromIndex, toIndex);
-
-        boolean hasNext = toIndex < totalPosts;
+        boolean hasNext = paginatedPosts.size() == pageSize;
         boolean hasPrevious = pageNumber > 1;
 
-        // 📦 Модель
         model.addAttribute("posts", paginatedPosts);
 
         Paging paging = new Paging();
         paging.setPageSize(pageSize);
         paging.setPageNumber(pageNumber);
-        paging.setHasNext(toIndex < totalPosts);
-        paging.setHasPrevious(pageNumber > 1);
+        paging.setHasNext(hasNext);
+        paging.setHasPrevious(hasPrevious);
 
         model.addAttribute("paging", paging);
 

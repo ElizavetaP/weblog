@@ -8,7 +8,7 @@ import java.util.List;
 public interface PostService {
 
 
-    public List<Post> findAll();
+    public List<Post> findAll(String tag, int pageSize, int pageNumber);
 
     List<Post> getPosts(String search, int pageSize, int pageNumber);
 

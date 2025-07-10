@@ -6,9 +6,12 @@ create table if not exists post(
   likesCount integer default 0);
 
 
-insert into post(title, textPreview, likesCount) values ('Cat 1', 'Это пост про кота', 55);
-insert into post(title, textPreview, likesCount) values ('Cat 2', 'Еще один пост про кота', 60);
-insert into post(title, textPreview, likesCount) values ('Cat 3', 'Новый кот', 53);
+insert into post(title, textPreview, likesCount) values ('Бублик', 'Это пост про кота', 55);
+insert into post(title, textPreview, likesCount) values ('Барсик', 'Еще один пост про кота', 60);
+insert into post(title, textPreview, likesCount) values ('Снежок', 'Новый кот', 53);
+insert into post(title, textPreview, likesCount) values ('Василий', 'Кот', 55);
+insert into post(title, textPreview, likesCount) values ('Муся', 'Мой кот', 60);
+insert into post(title, textPreview, likesCount) values ('Урсула', 'Новый кот', 53);
 
 create table if not exists comment (
   id bigserial primary key,
@@ -28,7 +31,14 @@ INSERT INTO comment (post_id, text, author, created_at) VALUES
 (2, 'Супер!', NULL, '2024-07-02 09:10:00'),
 
 (3, 'Этот - лучший', 'Мария', '2024-07-03 08:30:00'),
-(3, 'Похож на моего кота', 'Артем', '2024-07-03 08:45:00');
+(3, 'Похож на моего кота', 'Артем', '2024-07-03 08:45:00'),
+
+(4, 'Красивый котик', 'Анна', '2024-07-01 10:15:00'),
+(4, 'А я люблю собак', 'Игорь', '2024-07-01 10:20:00'),
+
+(5, 'Хаха', 'Елена', '2024-07-01 10:35:00'),
+
+(6, 'Хаха', 'Елена', '2024-07-01 10:35:00');
 
 --Таблица с тегами
 create table if not exists tag (
@@ -64,3 +74,16 @@ INSERT INTO post_tag (post_id, tag_id) VALUES
 INSERT INTO post_tag (post_id, tag_id) VALUES
 (3, 1),  -- кот
 (3, 5);  -- юмор
+
+INSERT INTO post_tag (post_id, tag_id) VALUES
+(4, 1),  -- кот
+(4, 5);  -- юмор
+
+INSERT INTO post_tag (post_id, tag_id) VALUES
+(5, 1),  -- кот
+(5, 2);  -- животные
+
+INSERT INTO post_tag (post_id, tag_id) VALUES
+(6, 1),  -- кот
+(6, 2),  -- животные
+(6, 3);  -- милота

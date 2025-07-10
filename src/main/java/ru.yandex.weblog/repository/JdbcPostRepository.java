@@ -18,28 +18,37 @@ public class JdbcPostRepository implements PostRepository {
     }
 
     @Override
-    public List<Post> findAll() {
-        String sql = "SELECT p.id AS post_id,\n" +
-                "       p.title,\n" +
-                "       p.textPreview,\n" +
-                "       p.likesCount,\n" +
-                "\n" +
-                "       c.id AS comment_id,\n" +
-                "       c.text AS comment_text,\n" +
-                "       c.author,\n" +
-                "       c.created_at,\n" +
-                "\n" +
-                "       t.id AS tag_id,\n" +
-                "       t.name AS tag_name\n" +
-                "\n" +
-                "FROM post p\n" +
-                "LEFT JOIN comment c ON p.id = c.post_id\n" +
-                "LEFT JOIN post_tag pt ON p.id = pt.post_id\n" +
-                "LEFT JOIN tag t ON pt.tag_id = t.id";
+    public List<Post> findAll(String tag, int pageSize, int pageNumber) {
+        String sql = """
+                SELECT p.id AS post_id,
+                       p.title,
+                       p.textPreview,
+                       p.likesCount,
+                
+                       c.id AS comment_id,
+                       c.text AS comment_text,
+                       c.author,
+                       c.created_at,
+                
+                       t.id AS tag_id,
+                       t.name AS tag_name
+                
+                FROM (SELECT DISTINCT p.id
+                      FROM post p
+                      JOIN post_tag pt ON p.id = pt.post_id
+                      JOIN tag t ON pt.tag_id = t.id
+                      WHERE t.name LIKE ?
+                      ORDER BY p.id
+                      LIMIT ? OFFSET ?
+                      ) ids
+                JOIN post p ON p.id = ids.id
+                LEFT JOIN comment c ON p.id = c.post_id
+                LEFT JOIN post_tag pt ON p.id = pt.post_id
+                LEFT JOIN tag t ON pt.tag_id = t.id
+                """;
 
         Map<Long, Post> postMap = new LinkedHashMap<>();
         Map<Long, Set<Long>> postCommentIds = new HashMap<>();
-        Map<Long, Set<String>> postTagNames = new HashMap<>();
 
         jdbcTemplate.query(sql, rs -> {
             long postId = rs.getLong("post_id");
@@ -76,27 +85,23 @@ public class JdbcPostRepository implements PostRepository {
             if (tagName != null && !post.getTags().contains(tagName)) {
                 post.getTags().add(tagName);
             }
-        });
+        }, "%" + tag + "%", pageSize, (pageNumber - 1)*pageSize);
 
         return new ArrayList<>(postMap.values());
     }
 
     @Override
-    public List<Post> findAll(String search, int pageSize, int pageNumber) {
-        return List.of();
-    }
-
-    @Override
     public Post findById(Long id) {
-        String sql = "SELECT " +
-                "p.id as post_id, p.title, p.textPreview, p.likesCount, " +
-                "c.id as comment_id, c.text as comment_text, c.author, c.created_at, " +
-                "t.name as tag_name " +
-                "FROM post p " +
-                "LEFT JOIN comment c ON p.id = c.post_id " +
-                "LEFT JOIN post_tag pt ON p.id = pt.post_id " +
-                "LEFT JOIN tag t ON pt.tag_id = t.id " +
-                "WHERE p.id = ?";
+        String sql = """
+                SELECT p.id as post_id, p.title, p.textPreview, p.likesCount,
+                    c.id as comment_id, c.text as comment_text, c.author, c.created_at,
+                    t.name as tag_name
+                FROM post p
+                LEFT JOIN comment c ON p.id = c.post_id
+                LEFT JOIN post_tag pt ON p.id = pt.post_id
+                LEFT JOIN tag t ON pt.tag_id = t.id
+                WHERE p.id = ?
+                """;
         return jdbcTemplate.query(sql, rs -> {
             Post post = null;
             Set<String> tagNames = new HashSet<>();
