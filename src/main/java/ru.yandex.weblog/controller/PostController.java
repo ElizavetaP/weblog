@@ -78,4 +78,32 @@ public class PostController {
         return "redirect:/posts";
     }
 
+    @PostMapping("/{id}/delete")
+    public String deletePost(@PathVariable("id") Long id) {
+        postService.deleteById(id);
+        return "redirect:/posts";
+    }
+
+    @GetMapping("/{id}/edit")
+    public String editPostForm(@PathVariable("id") Long id, Model model) {
+        Post post = postService.getPostById(id);
+        model.addAttribute("post", post);
+        return "add-post";
+    }
+
+    @PostMapping("/{id}")
+    public String editPost(@PathVariable("id") Long id,
+                           @RequestParam("title") String title,
+                           @RequestParam("textPreview") String textPreview,
+                           @RequestParam(value = "tags", required = true) String tags,
+                           @RequestParam(value = "image", required = false) String image) {
+        Post post = new Post();
+        post.setId(id);
+        post.setTitle(title);
+        post.setTextPreview(textPreview);
+        System.out.println(image);
+        post.setImage(image);
+        postService.editPost(post);
+        return "redirect:/posts/" + id;
+    }
 } 

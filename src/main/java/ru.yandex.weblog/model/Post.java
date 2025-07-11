@@ -70,4 +70,7 @@ public class Post {
         this.image = image;
     }
 
+    public String getTagsAsText() {
+        return String.join("#", tags);
+    }
 } 

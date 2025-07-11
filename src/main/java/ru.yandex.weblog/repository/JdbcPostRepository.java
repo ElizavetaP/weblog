@@ -159,7 +159,11 @@ public class JdbcPostRepository implements PostRepository {
 
     @Override
     public void update(Post post) {
-
+        jdbcTemplate.update("UPDATE post SET title = ?, textPreview = ?, image = ? WHERE id = ?",
+                post.getTitle(),
+                post.getTextPreview(),
+                post.getImage(),
+                post.getId());
     }
 
     @Override

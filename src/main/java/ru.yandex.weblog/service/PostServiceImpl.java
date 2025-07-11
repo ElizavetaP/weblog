@@ -42,4 +42,9 @@ public class PostServiceImpl implements PostService {
         postRepository.likePost(id, isLike);
     }
 
+    @Override
+    public void editPost(Post post) {
+        postRepository.update(post);
+    }
+
 } 
