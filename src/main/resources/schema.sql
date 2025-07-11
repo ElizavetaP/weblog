@@ -2,17 +2,17 @@
 create table if not exists post(
   id bigserial primary key,
   title varchar(256) not null,
-  textPreview varchar(256),
+  textPreview varchar(1024),
   likesCount integer default 0,
   image varchar(256)
   );
 
 
-insert into post(title, textPreview, likesCount, image) values ('Бублик', 'Это пост про кота', 55, '1.jpg');
-insert into post(title, textPreview, likesCount, image) values ('Барсик', 'Еще один пост про кота', 60, '2.jpg');
-insert into post(title, textPreview, likesCount, image) values ('Снежок', 'Новый кот', 53, '3.jpg');
-insert into post(title, textPreview, likesCount, image) values ('Василий', 'Кот', 55, '4.jpg');
-insert into post(title, textPreview, likesCount, image) values ('Муся', 'Мой кот', 60, '5.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Бублик', 'Кажется, мой кот решил, что я — его мебель.', 55, '1.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Барсик', 'Кот ночью скинул кружку со стола. Просто так. Потому что кот.', 60, '2.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Снежок', 'Кот поймал муху, потом отпустил. Видимо, это был акт милосердия.', 53, '3.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Василий', 'Купили коту дорогую лежанку. Он продолжает спать в коробке. Классика.', 55, '4.jpg');
+insert into post(title, textPreview, likesCount, image) values ('Муся', 'Утренний будильник — мой кот.', 60, '5.jpg');
 insert into post(title, textPreview, likesCount, image) values ('Урсула', 'Новый кот', 53, '6.jpg');
 
 create table if not exists comment (
@@ -38,9 +38,7 @@ INSERT INTO comment (post_id, text, author, created_at) VALUES
 (4, 'Красивый котик', 'Анна', '2024-07-01 10:15:00'),
 (4, 'А я люблю собак', 'Игорь', '2024-07-01 10:20:00'),
 
-(5, 'Хаха', 'Елена', '2024-07-01 10:35:00'),
-
-(6, 'Хаха', 'Елена', '2024-07-01 10:35:00');
+(5, 'Хаха', 'Елена', '2024-07-01 10:35:00');
 
 --Таблица с тегами
 create table if not exists tag (

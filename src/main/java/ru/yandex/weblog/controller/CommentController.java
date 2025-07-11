@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.yandex.weblog.service.CommentService;
-import ru.yandex.weblog.service.PostService;
 
 @Controller
 @RequestMapping("/posts")

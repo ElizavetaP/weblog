@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.yandex.weblog.model.Comment;
 import ru.yandex.weblog.repository.CommentRepository;
-import ru.yandex.weblog.repository.PostRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
