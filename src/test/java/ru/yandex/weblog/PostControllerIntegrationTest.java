@@ -70,7 +70,7 @@ public class PostControllerIntegrationTest {
     void save_shouldAddPostToDatabaseAndRedirect() throws Exception {
         mockMvc.perform(post("/posts")
                         .param("title", "Кот")
-                        .param("textPreview", "Содержимое 3")
+                        .param("textPreview", "Текст 3")
                         .param("tags", "кот")
                         .param("image", "3.jpg"))
                 .andExpect(status().is3xxRedirection())
