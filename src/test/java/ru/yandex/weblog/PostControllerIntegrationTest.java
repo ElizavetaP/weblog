@@ -2,7 +2,6 @@ package ru.yandex.weblog;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
@@ -17,14 +16,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "classpath:test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@TestPropertySource(locations = "classpath:test-application.properties")
+@TestPropertySource(locations = "classpath:test-application.yml")
 public class PostControllerIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
-
-    @Value("${test-sql.path}")
-    private String testSqlPath;
 
     @Test
     void getPosts_shouldReturnHtmlWithPosts() throws Exception {

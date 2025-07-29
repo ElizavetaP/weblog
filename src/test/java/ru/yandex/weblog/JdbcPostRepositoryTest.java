@@ -15,14 +15,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Sql(scripts = "classpath:test-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@TestPropertySource(locations = "classpath:test-application.properties")
+@TestPropertySource(locations = "classpath:test-application.yml")
 public class JdbcPostRepositoryTest {
 
     @Autowired
     private PostRepository postRepository;
-
-    @Value("${test-sql.path}")
-    private String testSqlPath;
 
     @Test
     void save_shouldAddUserToDatabase() {
