@@ -1,53 +1,27 @@
 plugins {
     id 'java'
-    id 'war'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 group = 'ru.yandex.weblog'
-version = '1.0-SNAPSHOT'
-
-java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
-}
+version = '2.0-SNAPSHOT'
+java.sourceCompatibility = JavaVersion.VERSION_21
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    // Spring Web MVC
-    implementation 'org.springframework:spring-webmvc:6.2.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
 
-    // Thymeleaf
-    implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
-    implementation 'org.thymeleaf:thymeleaf-spring6:3.1.2.RELEASE'
+    runtimeOnly 'com.h2database:h2'
 
-    // H2 Database
-    implementation 'com.h2database:h2:2.2.224'
-
-    // Spring JDBC
-    implementation 'org.springframework:spring-jdbc:6.1.4'
-    implementation 'org.springframework.data:spring-data-jdbc:3.4.1'
-
-    // Logging
-    implementation 'org.slf4j:slf4j-api:2.0.12'
-    implementation 'ch.qos.logback:logback-classic:1.5.13'
-
-    // Servlet API (provided by container)
-    providedCompile 'jakarta.servlet:jakarta.servlet-api:4.0.2'
-
-    // Тестирование
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.2'
-    testImplementation 'org.springframework:spring-test:6.2.1'
-    testImplementation 'org.hamcrest:hamcrest:2.2'
-    testImplementation 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
-tasks.withType(Test).configureEach {
+tasks.named('test') {
     useJUnitPlatform()
-}
-
-war {
-    archiveBaseName.set('weblog')
 }
